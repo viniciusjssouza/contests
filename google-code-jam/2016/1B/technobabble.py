@@ -1,10 +1,13 @@
 #!python
 # Round 1B 2016 - Tecnobable
-# https://code.google.com/codejam/contest/11254486/dashboard
-#
+# https://code.google.com/codejam/contest/11254486/dashboard#s=p2
+# 
+# Consider the words as a bipartite graph and apply a max matching algorithm.
+# The edges/words included in the max matching are surely not fake. 
 
 import math
 import sys
+from graphs import *
 
 debug_enabled = False
 f = sys.stdin
@@ -21,15 +24,20 @@ for t in range(1, T+1):
     
     words1 = set()
     words2 = set()
-    count = 0
+    graph = Graph()
+    
     for n in range(0, N):
         a,b = f.readline().split()
-        if a in words1 and b in words2:
+        graph.connect(a + "_U", b + "_V")
+        
+    matches = MaxMatching(graph)    
+    count = matches.size()
+    
+    for w in graph.vertexes():
+        if w not in matches.matches:
             count = count + 1
-        else:
-            words1.add(a)        
-            words2.add(b)
-    print ('Case #%d: %d') % (t, count)        
+            
+    print ('Case #%d: %d') % (t, N-count)        
     
  
     
